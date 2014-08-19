@@ -16,10 +16,10 @@ class Controller
      */
     function __construct()
     {
+        session_start();
         $this->openDatabaseConnection();
         $this->initializeCanvasApi();
 				
-        session_start();
     }
 
     /**
@@ -38,9 +38,25 @@ class Controller
         $this->db = new PDO(DB_TYPE . ':host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS, $options);
     }
 		
-		private function initializeCanvasApi($url=CANVAS_API_URL, $token=CANVAS_API_TOKEN) {
-			$this->canvasApi = new CanvasApi($url, $token);
+	protected function initializeCanvasApi($institution='') {
+		$instution_model = $this->loadModel('InstitutionModel');
+
+		if ($institution == '' && isset($_SESSION['canvas-admin-dashboard']['institution']['id'])) {
+			$institution = $_SESSION['canvas-admin-dashboard']['institution']['id'];
 		}
+
+		if(is_numeric($institution)){
+			$this->institution = $instution_model->findByKey($institution);
+		} else if($institution != '') {
+			$this->institution = $instution_model->findOne(array('slug'=>$institution));
+		}
+
+		if(isset($this->institution) && $this->institution['oauth_token']) {
+			$url = 'https://' . $this->institution['api_domain'];
+			require_once 'canvas/canvas-api.php';
+			$this->canvasApi = new CanvasApi($url, $this->institution['oauth_token']);
+		}
+	}
 
     /**
      * Load the model with the given name.
@@ -67,6 +83,20 @@ class Controller
         return new $model_name($this->db, $table_name);
     }
 
+    public function loadReport($report_name)
+    {
+        require_once 'application/libs/reports/basereport.php';
+        
+        if(file_exists('application/libs/reports/' . strtolower($report_name) . '.php')) {
+          require_once 'application/libs/reports/' . strtolower($report_name) . '.php';
+        } else {
+          $report_name = 'BaseReport';
+        }
+        
+        // return new model (and pass the database connection to the model)
+        return new $report_name($this);
+    }
+
     public function render($view, $data_array = array())
     {
         // load Twig, the template engine
@@ -78,8 +108,8 @@ class Controller
         $twig->addExtension(new Twig_Extension_Debug());
         
         $data_array['_app'] = array(
-          'request' => array('view' => $view, 'controller' => strtolower(get_class($this))),
-          'session' => array('user' => $this->authenticatedUser())
+          'request' => array('url' => $_GET['url'], 'view' => $view, 'controller' => strtolower(get_class($this)), 'data' => $data_array),
+          'session' => $_SESSION['canvas-admin-dashboard']
         );
 
         // render a view while passing the to-be-rendered data

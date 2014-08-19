@@ -1,5 +1,3 @@
-@import "bootstrap/bootstrap";
-
 li.include {
 	.fa-times {
 		color: #ddd;
@@ -24,6 +22,22 @@ li.exclude {
 	}
 }
 
+.depth-1 {
+	padding-left: 25px;
+	background: #ddd;
+	font-size: 1.5em;
+}
+
+.depth-2 {
+	background: #eee;
+	padding-left: 50px;
+	font-size: 1.25em;
+}
+
+.depth-3 {
+	padding-left: 75px;
+}
+
 .btn.active { 
 	background: #0081c2; 
 	color: #fff;
@@ -46,29 +60,35 @@ li.exclude {
 #count a {
 	width: 200px;
 }
-#departmentCourses { 
+.enrollment-count {
+	min-width: 30px;
+	display: inline-block;
+}
+.department { 
 	clear: both; 
 	margin-top: 5px; 
 	min-height: 100px; 
 }
-#departmentCourses li {
+.department li {
 	padding: 0 10px; 
 }
 h1 { 
-	margin: 40px 0 45px 10px; 
+	margin: 20px 0;
 	text-shadow: 0px 2px 2px #000; 
 }
 h2 {
-	background: #003366; 
-	border-radius: 5px;
-	box-shadow: 0px 2px 2px #9C9C9C; 
-	color: #fff; 
 	padding: 10px;
+	border-bottom: 1px solid #CCC;
+  	margin-bottom: 20px;
+}
+.courses h2 {
+	border-bottom: none;
+	padding: 0;
 }
 .li i {
 	margin-right: 5px;
 }
-#departmentCourses .icon-ok-sign, #generateProcess .completed, .include .icon-ok{ 
+.courses .fa-check-circle, #generateProcess .completed, .include .icon-ok{ 
 	color: #468847; 
 }
 .exclude .icon-ok, .include .icon-remove,  .undecided i {
@@ -82,7 +102,7 @@ h2 {
 	color: #8D8D8D;
 }
 .heading { 
-	background: #003366; 
+	background: #0F2439;
 	box-shadow: 0px 2px 2px #9C9C9C; 
 	color: #fff; 
 	margin-bottom: 20px; 
@@ -108,14 +128,27 @@ h2 {
 	font-size: 14px;
 	margin-right: 5px;
 }
-#departmentCourses .icon-question-sign, .exclude .icon-remove{ 
+.courses .fa-question-circle, .exclude .icon-remove{ 
 	color: #b94a48; 
 }
-.notUsingCanvas, i.icon-circle-blank {
+.not-using-canvas, i.fa-times-circle {
 	color: #9E9E9E;
 }
-#departmentCourses ol { 
-	list-style-type: none; 
+.courses ul { 
+	list-style-type: none;
+	column-count: 3;
+	-moz-column-count: 3;
+	-webkit-column-count: 3;
+}
+.screenreader-only {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
 }
 select, .btn { 
 	margin-bottom: 5px; 
@@ -128,6 +161,11 @@ select {
 	float: right;
 	font-size: 16px;
 	margin-right: 10px;
+}
+
+footer .logo img {
+	max-width: 300px;
+	max-height: 110px;
 }
 @media (max-width: 767px){
 	body {

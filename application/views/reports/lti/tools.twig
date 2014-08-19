@@ -1,0 +1,38 @@
+{% extends "reports/_template.twig" %}
+
+{% block page_title %}
+	 {{ institution.slug|upper }} LTI Tools
+{% endblock %}
+
+{% block topbar %}
+    <div class="heading">
+        <div class="container">
+            <h1><i class="fa fa-cogs"></i> {{ institution.slug|upper }} LTI Tools</h1>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+	<table class="table table-striped"> 	
+		<thead>
+			<tr>
+				<th width="40">Course Count</th>
+				<th width="30"></th>
+				<th>Tool Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for record in report_data %}
+				<tr>
+					<td align="right">{{ record.course_count }}</td>
+					<td>
+						{% if record.tool_icon != 'NO ICO' %}
+							<img src="{{ record.tool_icon }}"></td>
+						{% endif %}
+					<td><a href="{{ constant('URL') }}reports/{{ institution.slug }}/lti/courses&filters[tool_name]={{ record.tool_name|url_encode }}&filters[term]={{ filters.term }}">{{ record.tool_name }}</a>
+					</td>
+				</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

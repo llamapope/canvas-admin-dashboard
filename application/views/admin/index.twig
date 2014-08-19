@@ -1,0 +1,65 @@
+{% extends "admin/base.twig" %}
+
+{% block page_title %}
+	{{ institution.slug|upper }} Term Data
+{% endblock %}
+
+{% block nav %}
+	<style type="text/css">
+		body { padding-top: 50px; }
+	</style>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	  <div class="container">
+	   	<ul class="nav navbar-nav">
+			<li class="active">
+				<a href="{{ constant('URL') }}admin/index">Admin</a>
+			</li>
+			<li>
+				<a href="{{ constant('URL') }}admin/institution">Institution</a>
+			</li>
+			<li>
+				<a href="{{ constant('URL') }}reports/{{ institution.slug }}/syllabus/dashboard" target="_blank">Syllabus</a>
+			</li>
+			<li>
+				<a href="{{ constant('URL') }}reports/{{ institution.slug }}/lti/tools" target="_blank">LTI</a>
+			</li>
+		</ul>
+	  </div>
+	</nav>
+{% endblock %}
+{% block topbar %}
+    <div class="heading">
+        <div class="container">
+            <h1><i class="fa fa-database"></i> {{ institution.slug|upper }} Term Data</h1>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<ul class="nav nav-pills">
+			<li>
+		    	<a href="{{ constant('URL') }}admin/terms">Update Institution Terms</a>
+			</li>
+			<li>
+				<a href="{{ constant('URL') }}admin/users">Update Institution Users</a>
+			</li>
+		</ul>
+	</div>
+	<div class="row">
+		<form action="{{ constant('URL') }}admin/import" class="form-horizontal" enctype="multipart/form-data"
+	       method="post">
+			<h2>Import term data</h2>
+			{% if terms %}
+				{% include '_templates/term_select.php' %}
+			{% endif %}
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-default">Next</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+{% endblock %}
